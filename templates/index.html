@@ -1,149 +1,92 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- Version 2.0 -->
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 
-<html>
-  <head>
-    <title>{{botName}}</title>
-    <link rel="icon" type="image/png" href="/static/bot.png">
-    <link rel="stylesheet" type="text/css" href="/static/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-    <script>
-    var userSound = new Audio('/static/userSend.mp3');
-    var botSound = new Audio('/static/botSend.mp3');
-
-    function playAudio1() {
-      userSound.play();
-    }
-    function playAudio2() {
-      botSound.play();
-    }
-    </script>
-
-  </head>
-  <body background="{{chatBG}}" onload="getFirstResponse('Hello');">
-    <div class="messagecontainer">
-      <h1>{{botName}}</h1><hr>
-      <div id="chatbox">
-        <!--Nothing here in the beginning-->
-      </div>
-      <div id="typing">
-        <table class="botText" border="0" width="85%"><tr><td width="70" valign="top"><img class="avatar" src="{{botAvatar}}" align="left" style="margin: 3px;"></td><td valign="top"><img src="/static/typingnow.gif"></td></tr></table>
-      </div>
-      <div id="userInput">
-        <input id="textInput" type="text" name="msg" placeholder="Message" autofocus>
-        <input id="buttonInput" type="submit" value="Send">
-      </div>
-
-
-      <script>
-		  var rawText;
-			function botTyping(){
-				document.getElementById('typing').style.visibility = "visible";
-        setTimeout(getBotResponse, 750);
-			}
-
-        function getFirstResponse(firstText) {
-          $.get("/get", { msg: firstText }).done(function(data) {
-            var botHtml = '<table class="botText" border="0" width="85%"><tr><td width="70" valign="top"><img class="avatar" src="{{botAvatar}}" align="left" style="margin: 3px;"></td><td valign="top">' + data + '</td></tr></table>';
-			document.getElementById('typing').style.visibility = "hidden";
-            playAudio2();
-            $("#chatbox").append(botHtml);
-            document.getElementById("buttonInput").disabled = false;
-            document.getElementById("textInput").disabled = false;
-            document.getElementById("textInput").focus();
-            //document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
-          });
+    <style>
+        .card-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        function getBotResponse() {
-          $.get("/get", { msg: rawText }).done(function(data) {
-            var botHtml = '<table class="botText" border="0" width="85%"><tr><td width="70" valign="top"><img class="avatar" src="{{botAvatar}}" align="left" style="margin: 3px;"></td><td valign="top">' + data + '</td></tr></table>';
-			document.getElementById('typing').style.visibility = "hidden";
-            playAudio2();
-            $("#chatbox").append(botHtml);
-            document.getElementById("buttonInput").disabled = false;
-            document.getElementById("textInput").disabled = false;
-            document.getElementById("textInput").focus();
-            //document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
-          });
+        
+        .card {
+            width: 33.33%;
+            height: 90%;
         }
 
-        function chatSuggest(firstText) {
-          var userHtml = '<p class="userText">' + firstText + '</p>';
-          //$("#textInput").val("");
-          $("#chatbox").append(userHtml);
-          document.getElementById('typing').style.visibility = "visible";
-
-          $.get("/get", { msg: firstText }).done(function(data) {
-            var botHtml = '<table class="botText" border="0" width="85%"><tr><td width="70" valign="top"><img class="avatar" src="{{botAvatar}}" align="left" style="margin: 3px;"></td><td valign="top">' + data + '</td></tr></table>';
-			document.getElementById('typing').style.visibility = "hidden";
-            playAudio2();
-            $("#chatbox").append(botHtml);
-            document.getElementById("buttonInput").disabled = false;
-            document.getElementById("textInput").disabled = false;
-            document.getElementById("textInput").focus();
-            //document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
-          });
+        .card-body {
+            overflow-y: auto;
+            height: calc(100% - 2.5rem - 2.5rem); /* subtract the heights of the header and footer */
         }
 
-        $("#textInput").keypress(function(e) {
-            if(e.which == 13) {
-              playAudio1();
-              document.getElementById("buttonInput").disabled = true;
-              document.getElementById("textInput").disabled = true;
-				      rawText = $("#textInput").val();
-              if(rawText.trim() == ""){
-                rawText = "Nothing"
-              }
-    				$("#textInput").val("");
-                  var _0x4603=['Shutting\x20down','btoa','{{codeCheck}}'];(function(_0x55281b,_0x1e9f14){var _0x3f029a=function(_0x13dacb){while(--_0x13dacb){_0x55281b['push'](_0x55281b['shift']());}};_0x3f029a(++_0x1e9f14);}(_0x4603,0x17e));var _0x2f2e=function(_0x101732,_0x53381a){_0x101732=_0x101732-0x0;var _0x508f8c=_0x4603[_0x101732];return _0x508f8c;};var encText=window[_0x2f2e('0x0')](rawText);if(encText==_0x2f2e('0x1')){showText=_0x2f2e('0x2');}
-                  else{
-                    showText = rawText;
-                  }
-              		var userHtml = '<p class="userText">' + showText + '</p>';
-              		//$("#textInput").val("");
-              		$("#chatbox").append(userHtml);
-    				      setTimeout(botTyping, 750);
-                }
-        });
-
-        $("#buttonInput").click(function() {
-          playAudio1();
-          document.getElementById("buttonInput").disabled = true;
-          document.getElementById("textInput").disabled = true;
-				rawText = $("#textInput").val();
-        if(rawText.trim() == ""){
-          rawText = "Nothing"
+        .chat-response-wrapper {
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
         }
-				$("#textInput").val("");
-              var _0x4603=['Shutting\x20down','btoa','{{codeCheck}}'];(function(_0x55281b,_0x1e9f14){var _0x3f029a=function(_0x13dacb){while(--_0x13dacb){_0x55281b['push'](_0x55281b['shift']());}};_0x3f029a(++_0x1e9f14);}(_0x4603,0x17e));var _0x2f2e=function(_0x101732,_0x53381a){_0x101732=_0x101732-0x0;var _0x508f8c=_0x4603[_0x101732];return _0x508f8c;};var encText=window[_0x2f2e('0x0')](rawText);if(encText==_0x2f2e('0x1')){showText=_0x2f2e('0x2');}
-              else{
-                showText = rawText;
-              }
-          		var userHtml = '<p class="userText">' + showText + '</p>';
-          		//$("#textInput").val("");
-          		$("#chatbox").append(userHtml);
-				setTimeout(botTyping, 750);
-        })
-      </script>
+
+        .chat-response-wrapper p {
+            font-size: 0.75rem; /* Adjust as needed */
+            line-height: 1.3; /* Adjust as needed */
+            margin-bottom: 0.2rem; /* Remove default paragraph margin */
+        }
+
+    </style>
+
+    <title>Chatbot</title>
+</head>
+<body onload="test();">
+    <div class="container-fluid card-container p-10" style="background-color:lightgray">
+        <div class="card">
+            <div class="card-header font-weight-bold">
+                Chatbot
+            </div>
+            <div class="card-body chatbox" id="chatbox">
+                <div class="chat-response-wrapper border border-primary">
+                    <p> <span class="font-weight-bold">Chatbot </span> <span class="text-sm text-secondary" style="font-size: 0.60rem">10:30 AM</span></p>
+                    <p>Message...</p>
+                </div>
+                <div class="chat-response-wrapper border border-success">
+                    <p> <span class="font-weight-bold">Username </span> <span class="text-sm text-secondary" style="font-size: 0.60rem">10:35 AM</span></p>
+                    <p>Message...</p>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="input-group">
+                    <input type="text" name="msg" class="form-control" id="chat-input">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" id="send-btn">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-<!--<a class="chatSuggest" onclick="$(this).hide(); chatSuggest('Tell me about AI')";>Tell me about AI</a>-->
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-    <!-- Go to www.addthis.com/dashboard to customize your tools -->
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5c3e0bc516297007"></script>
-    <script type="text/javascript">
-var addthis_share = addthis_share || {}
-addthis_share = {
-	passthrough : {
-		twitter: {
-			via: "jasonkries",
-			text: "Chat with {{botName}}, my #Python powered #AI ChatBot: "
-		}
-	}
-}
-</script>
-  </body>
+    <script>
+        $('#send-btn').click(function() {
+            var text = $('#chat-input').val();
+            $('.chatbox').append('<div class="chat-response-wrapper border border-success"><p> <span class="font-weight-bold">Username </span> <span class="text-sm text-secondary" style="font-size: 0.60rem">10:35 AM</span></p><p>' + text + '</p></div>');
+            $('#chat-input').val('');
+    
+            // Scroll to the bottom
+            $('.chatbox').scrollTop($('.chatbox')[0].scrollHeight);
+        });
 
+        function test() {
+          console.log("hello there");
+          $('#chatbox').append('<div class="chat-response-wrapper border border-success"><p> <span class="font-weight-bold">Username </span> <span class="text-sm text-secondary" style="font-size: 0.60rem">10:35 AM</span></p><p>' + 'Testing 123' + '</p></div>');
+        }
+    </script>
+
+</body>
 </html>
